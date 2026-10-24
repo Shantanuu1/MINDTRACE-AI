@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block body %}<h1>Case Files</h1><div class="grid"><article class="card"><h3>Case {{ CASE.id }} — {{ CASE.title }}</h3><p>{{ CASE.synopsis }}</p>
+<p class="muted">Difficulty: {{ st.difficulty|title if st else CASE.level }} · Progress: {{ prog }}% · Best score: {{ best if best is not none else '—' }}</p>
+{% if st and st.started and not st.completed %}<a class="btn" href="{{ url_for('investigation') }}">Resume Case</a>
+<form method="post" action="{{ url_for('case_reset') }}" onsubmit="return confirm('Restart this case? Current progress is lost.')"><button class="btn danger">Restart Case</button></form>
+{% else %}<form method="post" action="{{ url_for('case_start') }}"><label>Difficulty <select name="difficulty"><option value="easy">Easy</option><option value="normal" selected>Normal</option><option value="hard">Hard (x1.5 score)</option></select></label> <button class="btn">Start Case</button></form>
+{% if st and st.completed %}<a class="btn ghost" href="{{ url_for('resolution') }}">View Resolution</a>{% endif %}{% endif %}</article>
+{% for n in (2,3) %}<article class="card locked"><h3>Case 00{{ n }} — Locked</h3><p>Not available yet.</p></article>{% endfor %}</div>{% endblock %}

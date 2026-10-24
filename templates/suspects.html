@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block body %}<h1>Suspect Dossiers</h1><div class="grid">{% for sid,s in SUSPECTS.items() %}<article class="card"><div class="portrait" style="background:{{ s.color }}">{{ s.initials }}</div>
+<h3>{{ s.name }}</h3><p class="muted">{{ s.role }}</p><p>{{ s.bio }}</p><p><b>Public motive:</b> {{ s.public_motive }}</p><p><b>Alibi:</b> {{ s.alibi }}</p>
+<p><b>Interview:</b> {{ st.transcripts[sid]|length }} question(s) asked{% if not st.transcripts[sid] %} (not interviewed){% endif %}</p>
+{% set ks = canon.CONTRADICTIONS|selectattr('suspect','equalto',sid)|list %}{% set vs = [] %}{% for k in ks %}{% if st.contradictions.get(k.id, {}).get('status') == 'verified' %}{% set _ = vs.append(k) %}{% endif %}{% endfor %}
+<p><b>Verified contradictions:</b> {{ vs|length }}</p>{% for k in vs %}<p class="secret">Secret uncovered: {{ k.why }}</p>{% endfor %}
+<a class="btn" href="{{ url_for('interrogation', sid=sid) }}">Interview</a></article>{% endfor %}</div>{% endblock %}

@@ -1,0 +1,9 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}MINDTRACE AI{% endblock %}</title><link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"></head>
+<body class="{{ '' if cfg.get('animations', True) else 'noanim' }}"><header class="nav"><a class="brand" href="{{ url_for('landing') }}">MINDTRACE <b>AI</b></a>
+<button class="burger" onclick="document.getElementById('links').classList.toggle('open')">Menu</button>
+<nav id="links">{% for ep,l in [('cases','Case Files'),('investigation','Investigate'),('suspects','Suspects'),('evidence','Evidence'),('journal','Journal'),('accusation','Accuse'),('profile','Profile'),('settings','Settings')] %}<a href="{{ url_for(ep) }}">{{ l }}</a>{% endfor %}</nav>
+<span id="ai-pill" class="pill">AI: checking</span></header>
+<main>{% with m = get_flashed_messages() %}{% for x in m %}<div class="flash">{{ x }}</div>{% endfor %}{% endwith %}{% block body %}{% endblock %}</main>
+<footer>Interrogation messages go only to your local Ollama service ({{ model }}). Not a guarantee of perfect privacy.</footer>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script></body></html>

@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block body %}<h1>Accusation Room</h1>{% if st.completed %}<p>The case is closed. <a href="{{ url_for('resolution') }}">See resolution</a></p>{% else %}
+{% if st.clues|length < 4 %}<p class="flash">Warning: you have found only {{ st.clues|length }} of {{ CLUES|length }} clues. An accusation ends the case.</p>{% endif %}
+{% if st.clues %}<form method="post" class="card" onsubmit="return confirm('Submit accusation? This ends the case.')"><h3>1. Suspect</h3>{% for k,s in SUSPECTS.items() %}<label><input type="radio" name="suspect" value="{{ k }}" required> {{ s.name }}</label> {% endfor %}
+<h3>2. Motive</h3>{% for k,v in MOTIVES.items() %}<label><input type="radio" name="motive" value="{{ k }}" required> {{ v }}</label><br>{% endfor %}
+<h3>3. Supporting evidence</h3>{% for c in st.clues %}<label><input type="checkbox" name="evidence" value="{{ c }}"> {{ CLUES[c].name }}</label><br>{% endfor %}
+<h3>4. Timeline</h3>{% for k,v in TIMELINES.items() %}<label><input type="radio" name="timeline" value="{{ k }}" required> {{ v }}</label><br>{% endfor %}<br><button class="btn danger">Submit Accusation</button></form>
+{% else %}<p>Find some evidence before you accuse anyone.</p>{% endif %}{% endif %}{% endblock %}

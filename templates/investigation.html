@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block body %}<h1>Investigation Hub</h1><div class="tabs">{% for k,l in LOCATIONS.items() %}<a class="{{ 'on' if k==loc }}" href="{{ url_for('investigation', loc=k) }}">{{ l.name }}</a>{% endfor %}</div>
+<div class="grid"><section class="card"><h3>{{ LOCATIONS[loc].name }}</h3><p>{{ LOCATIONS[loc].intro }}</p>
+{% for o in LOCATIONS[loc].objects %}{% set done = o.clue in st.clues %}<form method="post" action="{{ url_for('discover') }}"><input type="hidden" name="loc" value="{{ loc }}"><input type="hidden" name="obj" value="{{ o.id }}"><button class="btn {{ 'ghost' if done }}">{{ o.label }}{{ ' ✓' if done }}</button></form>{% endfor %}
+{% if LOCATIONS[loc].objects|selectattr('clue','in',st.clues)|list|length == LOCATIONS[loc].objects|length %}<p class="ok">Nothing more to find here.</p>{% endif %}</section>
+<aside class="card"><h3>Objectives</h3><ul>{% for t,d in objectives %}<li>{{ '✅' if d else '⬜' }} {{ t }}</li>{% endfor %}</ul>{% if hint %}<p class="muted">Hint: {{ hint }}</p>{% endif %}
+<p>Clues: {{ st.clues|length }}/{{ CLUES|length }} · Score: {{ st.score }}</p><div class="bar"><i style="width:{{ prog }}%"></i></div>
+<h4>Recent events</h4><ul class="small">{% for e in st.events[-5:]|reverse %}<li>{{ e.text }}</li>{% endfor %}</ul></aside></div>{% endblock %}

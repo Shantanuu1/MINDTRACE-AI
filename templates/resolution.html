@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block body %}<h1>Case Resolution</h1><section class="card"><h2>{{ ending }}</h2><p>{{ text }}</p>
+<p>{{ '✅ Correct culprit' if st.accusation.culprit_ok else '❌ Wrong suspect' }} · {{ '✅ Motive' if st.accusation.motive_ok else '❌ Motive' }} · {{ '✅ Timeline' if st.accusation.timeline_ok else '❌ Timeline' }} · {{ '✅ Strong evidence' if st.accusation.strong else '❌ Weak evidence' }}</p>
+<h3>What really happened</h3><p>{{ explanation }}</p><p><b>Score:</b> {{ st.score }} · <b>Rank:</b> {{ rank }}</p>
+<p>Clues {{ st.clues|length }}/{{ CLUES|length }} · Suspects interviewed {{ st.transcripts.values()|select|list|length }}/3 · Contradictions verified {{ ge.verified(st)|length }}</p>
+<p>{% for a in st.achievements %}<span class="badge">{{ ACH[a] }}</span> {% endfor %}</p>
+<form method="post" action="{{ url_for('case_reset') }}"><button class="btn">Play Again</button> <a class="btn ghost" href="{{ url_for('cases') }}">Case Files</a></form></section>{% endblock %}
